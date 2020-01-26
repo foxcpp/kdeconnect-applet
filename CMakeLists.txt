@@ -18,18 +18,18 @@ find_package(Qt5 COMPONENTS Core Widgets DBus REQUIRED)
 # Target definition
 
 set(SOURCES
-    src/main.cpp
-    src/mainwindow.cpp
-    src/kdeconnect.cpp
-    src/capturearea.cpp
+    ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/mainwindow.cpp
+    ${PROJECT_SOURCE_DIR}/src/kdeconnect.cpp
+    ${PROJECT_SOURCE_DIR}/src/capturearea.cpp
     )
 set(HEADERS
-    src/mainwindow.h
-    src/kdeconnect.h
-    src/capturearea.h
+    ${PROJECT_SOURCE_DIR}/src/mainwindow.h
+    ${PROJECT_SOURCE_DIR}/src/kdeconnect.h
+    ${PROJECT_SOURCE_DIR}/src/capturearea.h
     )
 set(QT_FILES
-    src/mainwindow.ui
+    ${PROJECT_SOURCE_DIR}/src/mainwindow.ui
     )
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${QT_FILES})

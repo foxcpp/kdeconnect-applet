@@ -11,7 +11,8 @@ class CaptureArea : public QLabel {
 public:
     CaptureArea(QWidget* parent = nullptr);
 signals:
-    void keyPress(QKeyEvent *ev);
+    void keyPress(QKeyEvent* ev);
+
 protected:
-    void keyPressEvent(QKeyEvent *ev) override;
+    void keyPressEvent(QKeyEvent* ev) override;
 };

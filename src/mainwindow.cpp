@@ -17,17 +17,14 @@ MainWindow::MainWindow() {
 
     // Connect before adding iterms so first addItem will call currentTextChanged
     // and select device.
-    connect(this->w.devicesCombo, &QComboBox::currentTextChanged, [this](const QString& s) {
-        this->conn.selectDevice(s.split(" - ").at(0));
-    });
+    connect(this->w.devicesCombo, &QComboBox::currentTextChanged,
+            [this](const QString& s) { this->conn.selectDevice(s.split(" - ").at(0)); });
     connect(&this->conn, &KDEConnect::photoReceived, [this](QMimeData* img) {
         auto cb = QGuiApplication::clipboard();
         cb->setMimeData(img);
 
         auto path = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) +
-            QStringLiteral("/kdeconnect-applet-") +
-            QUuid::createUuid().toString() +
-            QStringLiteral(".jpeg");
+                    QStringLiteral("/kdeconnect-applet-") + QUuid::createUuid().toString() + QStringLiteral(".jpeg");
         QFile out(path);
         out.open(QFile::WriteOnly);
         if (!out.isOpen()) {

@@ -4,10 +4,9 @@
 #include <QKeyEvent>
 #include <QDebug>
 
-KDEConnect::KDEConnect() :
-    kdeconnectIface("org.kde.kdeconnect.daemon", "/modules/kdeconnect",
-                    "org.kde.kdeconnect.daemon", QDBusConnection::sessionBus()) {
-
+KDEConnect::KDEConnect()
+    : kdeconnectIface("org.kde.kdeconnect.daemon", "/modules/kdeconnect", "org.kde.kdeconnect.daemon",
+                      QDBusConnection::sessionBus()) {
     qDBusRegisterMetaType<QHash<QString, QString>>();
 }
 
@@ -26,22 +25,20 @@ void KDEConnect::relayKeyPress(QKeyEvent* ev) {
     }
 
     QDBusError err = this->kbdIface->call("sendQKeyEvent", QHash<QString, QVariant>{
-        {"accepted", false},
-        {"key", ev->key()},
-        {"modifiers", int(ev->modifiers())},
-        {"nativeScanCode", ev->nativeScanCode()},
-        {"text", ev->text()},
-    });
+                                                               {"accepted", false},
+                                                               {"key", ev->key()},
+                                                               {"modifiers", int(ev->modifiers())},
+                                                               {"nativeScanCode", ev->nativeScanCode()},
+                                                               {"text", ev->text()},
+                                                           });
     if (err.isValid()) {
         throw std::runtime_error(err.message().toStdString());
     }
 }
 
 void KDEConnect::requestPhoto() {
-    auto path = QDir::tempPath() +
-        QStringLiteral("/kdeconnect-applet-") +
-        QUuid::createUuid().toString() +
-        QStringLiteral(".jpeg");
+    auto path = QDir::tempPath() + QStringLiteral("/kdeconnect-applet-") + QUuid::createUuid().toString() +
+                QStringLiteral(".jpeg");
 
     QDBusError err = this->photoIface->call("requestPhoto", path);
     if (err.isValid()) {
@@ -77,19 +74,15 @@ void KDEConnect::selectDevice(const QString& id) {
     this->selectedId = id;
     auto bus = QDBusConnection::sessionBus();
 
-    this->kbdIface.reset(new QDBusInterface(
-            "org.kde.kdeconnect.daemon",
-            QStringLiteral("/modules/kdeconnect/devices/") + id + "/remotekeyboard",
-            "org.kde.kdeconnect.device.remotekeyboard", bus));
-    this->photoIface.reset(new QDBusInterface(
-            "org.kde.kdeconnect.daemon",
-            QStringLiteral("/modules/kdeconnect/devices/") + id + "/photo",
-            "org.kde.kdeconnect.device.photo", bus));
+    this->kbdIface.reset(new QDBusInterface("org.kde.kdeconnect.daemon",
+                                            QStringLiteral("/modules/kdeconnect/devices/") + id + "/remotekeyboard",
+                                            "org.kde.kdeconnect.device.remotekeyboard", bus));
+    this->photoIface.reset(new QDBusInterface("org.kde.kdeconnect.daemon",
+                                              QStringLiteral("/modules/kdeconnect/devices/") + id + "/photo",
+                                              "org.kde.kdeconnect.device.photo", bus));
 
-    bool ok = bus.connect(this->photoIface->service(),
-            this->photoIface->path(),
-            this->photoIface->interface(), "photoReceived",
-            "s", this, SLOT(photoReceivedSlot(QString)));
+    bool ok = bus.connect(this->photoIface->service(), this->photoIface->path(), this->photoIface->interface(),
+                          "photoReceived", "s", this, SLOT(photoReceivedSlot(QString)));
     if (!ok) {
         qDebug() << "Signal connection failed";
     }

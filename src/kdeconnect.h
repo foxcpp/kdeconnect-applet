@@ -24,6 +24,7 @@ public slots:
     void relayKeyPress(QKeyEvent* ev);
 private slots:
     void photoReceivedSlot(const QString&);
+
 private:
     QString selectedId;
     std::unique_ptr<QDBusInterface> kbdIface;
