@@ -6,18 +6,6 @@ project(kdeconnect-applet
     LANGUAGES CXX)
 
 #----------------------------
-# Target definition
-
-# Populates SOURCES/HEADERS/etc variables.
-add_subdirectory(src)
-
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${UI_FILES} ${RC_FILES})
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 11
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF)
-
-#----------------------------
 # Dependencies
 
 set(CMAKE_AUTOMOC ON)
@@ -25,7 +13,33 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS Core Widgets DBus REQUIRED)
+
+#----------------------------
+# Target definition
+
+set(SOURCES
+    src/main.cpp
+    src/mainwindow.cpp
+    src/kdeconnect.cpp
+    src/capturearea.cpp
+    )
+set(HEADERS
+    src/mainwindow.h
+    src/kdeconnect.h
+    src/capturearea.h
+    )
+set(QT_FILES
+    src/mainwindow.ui
+    )
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${QT_FILES})
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    CXX_STANDARD 11
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Widgets Qt5::DBus)
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 #----------------------------
 # Strict warnings
