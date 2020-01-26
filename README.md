@@ -10,6 +10,7 @@ but they all require running Plasma DE which is not what some people want.
 
 - Terrible non-idiomatic Qt-based code.
 - Remote Keyboard implementation.
+- Request photo from device camera.
 
 ## Installation
 

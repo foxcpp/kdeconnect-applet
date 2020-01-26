@@ -31,7 +31,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="horizontalWidget" native="true">
+    <widget class="QWidget" name="toolbar" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
        <horstretch>0</horstretch>
@@ -46,7 +46,7 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QPushButton" name="kbdToggle">
+       <widget class="QPushButton" name="kbdToggleBtn">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -61,6 +61,16 @@
         </property>
         <property name="text">
          <string>Remote keyboard</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="requestPhotoBtn">
+        <property name="toolTip">
+         <string>Request the photo from device camera, copy it to clipboard and save in the Downloads directory.</string>
+        </property>
+        <property name="text">
+         <string>Request photo</string>
         </property>
        </widget>
       </item>
