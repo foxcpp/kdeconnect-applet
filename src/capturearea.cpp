@@ -1,5 +1,5 @@
 #include "capturearea.h"
-#include <qpalette.h>
+#include <qguiapplication.h>
 #include <QPalette>
 #include <QGuiApplication>
 #include <QDebug>
@@ -44,6 +44,9 @@ void CaptureArea::keyPressEvent(QKeyEvent* ev) {
         auto cb = QGuiApplication::clipboard();
         emit this->paste(cb->mimeData());
         return;
+    }
+    if (ev->key() == Qt::Key_Escape) {
+        QGuiApplication::exit();
     }
 
     emit this->keyPress(ev);
