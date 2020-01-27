@@ -5,7 +5,9 @@
 #include <QDebug>
 
 KDEConnect::KDEConnect()
-    : kdeconnectIface("org.kde.kdeconnect.daemon", "/modules/kdeconnect", "org.kde.kdeconnect.daemon",
+    : kdeconnectIface("org.kde.kdeconnect.daemon",
+                      "/modules/kdeconnect",
+                      "org.kde.kdeconnect.daemon",
                       QDBusConnection::sessionBus()) {
     qDBusRegisterMetaType<QHash<QString, QString>>();
 }
@@ -24,13 +26,14 @@ void KDEConnect::relayKeyPress(QKeyEvent* ev) {
         return;
     }
 
-    QDBusError err = this->kbdIface->call("sendQKeyEvent", QHash<QString, QVariant>{
-                                                               {"accepted", false},
-                                                               {"key", ev->key()},
-                                                               {"modifiers", int(ev->modifiers())},
-                                                               {"nativeScanCode", ev->nativeScanCode()},
-                                                               {"text", ev->text()},
-                                                           });
+    QDBusError err = this->kbdIface->call("sendQKeyEvent",
+                                          QHash<QString, QVariant>{
+                                              {"accepted", false},
+                                              {"key", ev->key()},
+                                              {"modifiers", int(ev->modifiers())},
+                                              {"nativeScanCode", ev->nativeScanCode()},
+                                              {"text", ev->text()},
+                                          });
     if (err.isValid()) {
         throw std::runtime_error(err.message().toStdString());
     }
@@ -76,13 +79,20 @@ void KDEConnect::selectDevice(const QString& id) {
 
     this->kbdIface.reset(new QDBusInterface("org.kde.kdeconnect.daemon",
                                             QStringLiteral("/modules/kdeconnect/devices/") + id + "/remotekeyboard",
-                                            "org.kde.kdeconnect.device.remotekeyboard", bus));
+                                            "org.kde.kdeconnect.device.remotekeyboard",
+                                            bus));
     this->photoIface.reset(new QDBusInterface("org.kde.kdeconnect.daemon",
                                               QStringLiteral("/modules/kdeconnect/devices/") + id + "/photo",
-                                              "org.kde.kdeconnect.device.photo", bus));
+                                              "org.kde.kdeconnect.device.photo",
+                                              bus));
 
-    bool ok = bus.connect(this->photoIface->service(), this->photoIface->path(), this->photoIface->interface(),
-                          "photoReceived", "s", this, SLOT(photoReceivedSlot(QString)));
+    bool ok = bus.connect(this->photoIface->service(),
+                          this->photoIface->path(),
+                          this->photoIface->interface(),
+                          "photoReceived",
+                          "s",
+                          this,
+                          SLOT(photoReceivedSlot(QString)));
     if (!ok) {
         qDebug() << "Signal connection failed";
     }

@@ -17,8 +17,9 @@ MainWindow::MainWindow() {
 
     // Connect before adding iterms so first addItem will call currentTextChanged
     // and select device.
-    connect(this->w.devicesCombo, &QComboBox::currentTextChanged,
-            [this](const QString& s) { this->conn.selectDevice(s.split(" - ").at(0)); });
+    connect(this->w.devicesCombo, &QComboBox::currentTextChanged, [this](const QString& s) {
+        this->conn.selectDevice(s.split(" - ").at(0));
+    });
     connect(&this->conn, &KDEConnect::photoReceived, [this](QMimeData* img) {
         auto cb = QGuiApplication::clipboard();
         cb->setMimeData(img);
