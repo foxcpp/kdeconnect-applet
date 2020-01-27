@@ -14,6 +14,7 @@ namespace {
 CaptureArea::CaptureArea(QWidget* parent) : QLabel(parent) {
     this->setText(stdText);
     this->setAcceptDrops(true);
+    this->setFocus();
 }
 
 void CaptureArea::dragEnterEvent(QDragEnterEvent *event) {
