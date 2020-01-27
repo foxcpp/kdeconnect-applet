@@ -38,6 +38,7 @@ MainWindow::MainWindow() {
     });
 
     connect(this->w.inputArea, &CaptureArea::keyPress, &this->conn, &KDEConnect::relayKeyPress);
+    connect(this->w.inputArea, &CaptureArea::paste, &this->conn, &KDEConnect::share);
     connect(this->w.requestPhotoBtn, &QPushButton::pressed, &this->conn, &KDEConnect::requestPhoto);
 
     for (auto it = devices.constBegin(); it != devices.constEnd(); ++it) {

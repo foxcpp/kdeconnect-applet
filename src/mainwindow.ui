@@ -91,7 +91,7 @@
       <bool>false</bool>
      </property>
      <property name="text" stdset="0">
-      <string>Click and type text here (if Remote Keyboard is active) or drag files here to send them.</string>
+      <string>...</string>
      </property>
      <property name="scaledContents" stdset="0">
       <bool>false</bool>

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QMimeData>
 #include <QWidget>
 #include <memory>
 #include <QtGlobal>
@@ -17,6 +18,7 @@ public:
     void selectDevice(const QString& deviceID);
 
     void requestPhoto();
+    void share(const QMimeData* d);
 
 signals:
     void photoReceived(QMimeData*);
@@ -29,5 +31,6 @@ private:
     QString selectedId;
     std::unique_ptr<QDBusInterface> kbdIface;
     std::unique_ptr<QDBusInterface> photoIface;
+    std::unique_ptr<QDBusInterface> shareIface;
     QDBusInterface kdeconnectIface;
 };

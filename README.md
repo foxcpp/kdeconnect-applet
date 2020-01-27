@@ -6,11 +6,16 @@ kdeconnect-indicator does not expose all KDE Connect features.  KDE Connect
 package includes the "plasmoid" implementation that provides remaining bits,
 but they all require running Plasma DE which is not what some people want.
 
+kdeconnect-applet is a simple GUI application consisting of a single window.
+If you use a tiling WM, you can configure it to place it somehow special.
+Otheriwse, it is just a regular GUI window.
+
 ## Features
 
 - Terrible non-idiomatic Qt-based code.
 - Remote Keyboard implementation.
 - Request photo from device camera.
+- Easily share multiple files by dropping them into the window.
 
 ## Installation
 

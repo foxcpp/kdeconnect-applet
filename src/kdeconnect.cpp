@@ -10,6 +10,7 @@ KDEConnect::KDEConnect()
                       "org.kde.kdeconnect.daemon",
                       QDBusConnection::sessionBus()) {
     qDBusRegisterMetaType<QHash<QString, QString>>();
+    qDBusRegisterMetaType<QList<QString>>();
 }
 
 QHash<QString, QString> KDEConnect::listDevices() {
@@ -51,6 +52,29 @@ void KDEConnect::requestPhoto() {
     qDebug() << "Requested photo for path" << path << "from" << this->selectedId;
 }
 
+void KDEConnect::share(const QMimeData* data) {
+    if (data->hasUrls()) {
+        QList<QString> vList;
+        vList.reserve(data->urls().size());
+        for (const auto& val : data->urls()) {
+            vList.append(val.toString());
+        }
+        QDBusError err = this->shareIface->call("shareUrls", vList);
+        if (err.isValid()) {
+            throw std::runtime_error(err.message().toStdString());
+        }
+        return;
+    }
+    if (data->hasText()) {
+        QDBusError err = this->shareIface->call("shareText", data->text());
+        if (err.isValid()) {
+            throw std::runtime_error(err.message().toStdString());
+        }
+        return;
+    }
+    qDebug() << "Unknown QMimeData type";
+}
+
 void KDEConnect::photoReceivedSlot(const QString& path) {
     QFile f(path);
     f.open(QFile::ReadOnly);
@@ -84,6 +108,10 @@ void KDEConnect::selectDevice(const QString& id) {
     this->photoIface.reset(new QDBusInterface("org.kde.kdeconnect.daemon",
                                               QStringLiteral("/modules/kdeconnect/devices/") + id + "/photo",
                                               "org.kde.kdeconnect.device.photo",
+                                              bus));
+    this->shareIface.reset(new QDBusInterface("org.kde.kdeconnect.daemon",
+                                              QStringLiteral("/modules/kdeconnect/devices/") + id + "/share",
+                                              "org.kde.kdeconnect.device.share",
                                               bus));
 
     bool ok = bus.connect(this->photoIface->service(),
